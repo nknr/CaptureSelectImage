@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.ui.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fileRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_document" />
+
+
+        <RelativeLayout
+            android:id="@+id/emptyView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:onClick="onLayoutClick">
+
+            <TextView
+
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:drawableTop="@drawable/ic_photo"
+                android:gravity="center"
+                android:text="@string/select_image_text"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textSize="@dimen/headingTextSize" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</layout>

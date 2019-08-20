@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="item"
+            type="java.io.File" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:elevation="3dp"
+        app:cardCornerRadius="2dp"
+        tools:ignore="UnusedAttribute">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:scaleType="fitXY"
+                tools:src="@tools:sample/avatars"
+                app:imageUrl="@{item.path}"
+                tools:ignore="ContentDescription" />
+
+            <ImageButton
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/image"
+                android:layout_alignParentEnd="true"
+                android:background="@android:color/transparent"
+                android:padding="8dp"
+                android:src="@drawable/ic_delete"
+                tools:ignore="ContentDescription" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/image"
+                android:layout_toStartOf="@id/delete"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingStart="10dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="8dp"
+                tools:text="@tools:sample/lorem"
+                android:text="@{item.name}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textSize="@dimen/mediumTextSize" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
