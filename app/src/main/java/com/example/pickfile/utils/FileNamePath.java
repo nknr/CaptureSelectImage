@@ -43,6 +43,7 @@ public class FileNamePath {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
+        Log.v(TAG,"scheme "+uri.getScheme());
         // DocumentProvider
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
             // ExternalStorageProvider
@@ -70,7 +71,6 @@ public class FileNamePath {
             }
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {
-                Log.v(TAG, "download " + uri);
                 final String id = DocumentsContract.getDocumentId(uri);
 
                 if (id != null && id.startsWith("raw:")) {
@@ -106,7 +106,6 @@ public class FileNamePath {
             }
             // MediaProvider
             else if (isMediaDocument(uri)) {
-                Log.v(TAG, "media " + uri);
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
@@ -131,7 +130,6 @@ public class FileNamePath {
         // MediaStore (and general)
         else if ("content".equalsIgnoreCase(uri.getScheme())) {
 
-            // Return the remote address
             if (isGooglePhotosUri(uri)) {
                 return getGooglePhotoImg(context,uri);
             }
@@ -396,6 +394,10 @@ public class FileNamePath {
      */
     private static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.contentprovider".equals(uri.getAuthority());
+    }
+
+    private static boolean isGoogleDriveUri(Uri uri) {
+        return "com.google.android.apps.docs.storage".equals(uri.getAuthority());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

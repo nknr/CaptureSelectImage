@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +34,7 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     private ActivityMainBinding binding;
     String[] PERMISSIONS = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private int RC_PERMISSIONS = 1;
@@ -99,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void displayImageDialog() {
-        final CharSequence[] items = {"Capture Photo", "Select from Library",
+        final CharSequence[] items = {"Capture Photo", "Gallery","Image Picker",
                 "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add Photo!");
@@ -107,13 +109,31 @@ public class MainActivity extends AppCompatActivity {
 
             if (items[item].equals("Capture Photo")) {
                 capturePhoto();
-            } else if (items[item].equals("Select from Library")) {
-                showDocDialog();
+            } else if (items[item].equals("Image Picker")) {
+                showImagePickerScreen();
+            }else if (items[item].equals("Gallery")) {
+                showDocumentDialog();
             } else if (items[item].equals("Cancel")) {
                 dialog.dismiss();
             }
         });
         builder.show();
+    }
+
+
+    private void showDocumentDialog() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        if (Build.VERSION.SDK_INT < 19) {
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            intent = Intent.createChooser(intent, "Select image");
+        } else {
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            String[] mimetypes = {"image/*"};
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
+        }
+        startActivityForResult(intent, RC_PICK);
     }
 
 
@@ -131,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, RC_CAPTURE);
     }
 
-    private void showDocDialog() {
+    private void showImagePickerScreen() {
         Intent intent = new Intent();
         intent.setType("image/*");
         if (Build.VERSION.SDK_INT < 19) {
@@ -142,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
             String[] mimetypes = {"image/*"};
             intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
         }
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivityForResult(intent, RC_PICK);
     }
 
@@ -152,8 +173,9 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == RC_PICK && resultCode == Activity.RESULT_OK && data != null) {
             Uri mainPath = data.getData();
             if (mainPath != null) {
-
+                Log.d(TAG,"uriPath "+mainPath);
                 String path = FileNamePath.getPathFromUri(this, mainPath);
+                Log.d(TAG,"path "+path);
                 if (path != null) {
                     mFile = new File(path);
                     adapter.addDocument(mFile);
